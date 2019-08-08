@@ -6,6 +6,7 @@ import com.dail.redis.utils.ExceptionUtil;
 import com.dail.redis.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -45,5 +46,16 @@ public class UserService {
         // 暂时默认
         userDTO.setPassword("123456");
         return userMapper.insertSelective(userDTO);
+    }
+
+    public Integer insertList(List<UserDTO> list) {
+        ExceptionUtil.isTrue(CollectionUtils.isEmpty(list), "参数不能为空");
+        for (UserDTO dto : list) {
+            ExceptionUtil.isTrue(StringUtil.isBlankOrEmpty(dto.getUsername()), "用户名不能为空");
+            ExceptionUtil.isTrue(StringUtil.isBlankOrEmpty(dto.getRealname()), "姓名不能为空");
+            // 暂时默认
+            dto.setPassword("123456");
+        }
+        return userMapper.insertList(list);
     }
 }

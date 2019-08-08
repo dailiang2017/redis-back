@@ -16,4 +16,6 @@ public interface UserMapper extends MyBatisBaseMapper<UserDTO, Long> {
 
     @Select("select * from t_user where username = #{username}")
     UserDTO findByName(@Param(value = "username") String username);
+
+    Integer insertList(List<UserDTO> list);
 }

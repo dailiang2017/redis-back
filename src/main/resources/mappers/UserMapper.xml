@@ -31,8 +31,7 @@
       `password`, creator, create_time, modifier, modify_time, is_deleted)
     values (#{id,jdbcType=BIGINT}, #{username,jdbcType=VARCHAR}, #{realname,jdbcType=VARCHAR}, 
       #{password,jdbcType=VARCHAR}, #{creator,jdbcType=BIGINT},
-      #{createTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=BIGINT}, #{modifyTime,jdbcType=TIMESTAMP},
-      #{isDeleted,jdbcType=CHAR})
+      now(), #{modifier,jdbcType=BIGINT}, now(), 'N')
   </insert>
   <insert id="insertSelective" parameterType="com.dail.redis.dto.UserDTO">
     insert into user
@@ -137,4 +136,16 @@
       is_deleted = #{isDeleted,jdbcType=CHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <insert id="insertList" parameterType="java.util.List">
+    insert into user (id, username, realname,
+      `password`, creator, create_time, modifier, modify_time, is_deleted)
+    values
+    <foreach collection="list" item="item" index="index" separator="," >
+      (#{item.id,jdbcType=BIGINT}, #{item.username,jdbcType=VARCHAR}, #{item.realname,jdbcType=VARCHAR},
+      #{item.password,jdbcType=VARCHAR}, #{item.creator,jdbcType=BIGINT},now(),
+      #{item.modifier,jdbcType=BIGINT}, now(),
+      'N')
+    </foreach>
+  </insert>
 </mapper>
